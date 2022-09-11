@@ -15,7 +15,7 @@ export class ChessBoardComponent implements OnInit {
 
   public numberOfSquares: number = 25;
   public defaultNumberOfSquares: number = 25;
-  public title:string = 'Control Panel';
+  public title:string = 'toy_robot_front_end';
   public robotCoordinates: robotCoordinates | null = null;
   public cardinalPoints: string[] = [];
   public formControl: FormGroup = new FormGroup({});
@@ -83,17 +83,16 @@ export class ChessBoardComponent implements OnInit {
    * place the robot on the chessboard
    */
   placeRobot() {
-    // this.toastService.show('I am a standard toast');
-        // this.robotPosition = 20;
-    this.robotCoordinates = {
+    const robotCoordinates = {
       X: this.formControl.controls['X'].value as number,
       Y: this.formControl.controls['Y'].value as number,
     }
-    const wrongPosition = this._checkRobotPosition(this.robotCoordinates);
+    const wrongPosition = this._checkRobotPosition(robotCoordinates);
     if(wrongPosition) {
       this.toastService.show(`Wrong robot position: max position is ${this._maxSquaresForSide} x ${this._maxSquaresForSide}`, { classname: 'bg-danger text-light', delay: 2000 });
     } else {
       const newRobotState = this._setNewRobotDirection(this.formControl.controls['direction'].value, ROBOT_COMMANDS.PLACE);
+      this.robotCoordinates = robotCoordinates;
       this.robotState$.next({
         ...this.robotCoordinates,
         direction: this.formControl.controls['direction'].value as string,

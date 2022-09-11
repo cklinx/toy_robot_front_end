@@ -11,29 +11,29 @@
             <form [formGroup]="formControl" class="container">
                 <div class="form-group row">
                     <label for="X">Set X:</label>
-                    <input type="number" min="0" formControlName="X" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Set X coordinate">
+                    <input data-testid="xCoords" type="number" min="0" formControlName="X" class="form-control" aria-describedby="emailHelp" placeholder="Set X coordinate">
                 </div>
                 <div class="form-group mt-2 row">
                     <label for="Y">Set Y:</label>
-                    <input type="number" min="0" formControlName="Y" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Set Y coordinate">
+                    <input data-testid="yCoords" type="number" min="0" formControlName="Y" class="form-control" aria-describedby="emailHelp" placeholder="Set Y coordinate">
                 </div>
                 <div class="form-group mt-2 row">
                     <label for="direction">Set direction:</label>
                     <select class="form-control" formControlName="direction">
-                      <option [ngValue]="direction" *ngFor="let direction of cardinalPoints">{{direction}}</option>
+                      <option [value]="direction" *ngFor="let direction of cardinalPoints">{{direction}}</option>
                     </select>
                 </div>
                 <div class="row mt-2 mb-2">
-                    <button type="button" class="btn btn-secondary" (click)="placeRobot()">Place</button>
+                    <button data-testid="bPlaceRobot" type="button" class="btn btn-secondary" (click)="placeRobot()">Place</button>
                 </div>
                 <div class="row mt-2 mb-2">
-                    <button type="button" class="btn btn-secondary" (click)="toggleReport()">Show - Hide Report</button>
+                    <button data-testid="bShowReport" type="button" class="btn btn-secondary" (click)="toggleReport()">Show - Hide Report</button>
                 </div>
                 <div class="row mt-2 mb-2">
                     <div class="btn-group" role="group" aria-label="robot controls">
-                        <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('left')"><i class="bi bi-sign-turn-left"></i> Left</button>
-                        <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('move')"><i class="bi bi-arrow-up-square"></i> Move</button>
-                        <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('right')">Right <i class="bi bi-sign-turn-right"></i></button>
+                        <button data-testid="bLeft" type="button" class="btn btn-outline-secondary" (click)="moveRobot('left')"><i class="bi bi-sign-turn-left"></i> Left</button>
+                        <button data-testid="bMove" type="button" class="btn btn-outline-secondary" (click)="moveRobot('move')"><i class="bi bi-arrow-up-square"></i> Move</button>
+                        <button data-testid="bRight" type="button" class="btn btn-outline-secondary" (click)="moveRobot('right')">Right <i class="bi bi-sign-turn-right"></i></button>
                     </div>
                 </div>
                                   
@@ -47,7 +47,7 @@
                     *ngFor="let square of getNumberOfColumns(); let cIndex = index"
             
                     >
-                        <toy-robot 
+                        <toy-robot
                             *ngIf="robotCoordinates != null && rIndex === robotCoordinates.Y && cIndex === robotCoordinates.X"
                             [robotState$]="robotState$"
                             >
@@ -58,13 +58,8 @@
         </div>
 
     </div>
-
     
-
-    
-        
 </div>
-
 
 <div *ngIf="showReport" class="mx-auto mt-4 m-3 chessboard-container bottom-0 start-0 ">
     <div class="card">
@@ -77,7 +72,5 @@
         </div>
         </div>
 </div>
-
-
 
 <toast></toast>
