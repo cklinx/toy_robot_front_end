@@ -12,16 +12,17 @@ export class SharedFuncsService {
    * set the new robot direction after rotate command
    */
    public setNewDirection = (degrees: number): string => {
+    
     switch(degrees) {
       case 180:
       case -180:
         return CARDINAL_POINTS.NORTH;
       case 90:
       case -270:
-        return CARDINAL_POINTS.EAST;
+        return CARDINAL_POINTS.WEST;
       case -90:
       case 270:
-        return CARDINAL_POINTS.WEST;
+        return CARDINAL_POINTS.EAST;
       case 0:
         return CARDINAL_POINTS.SOUTH;
       default:

@@ -137,10 +137,10 @@ export class ChessBoardComponent implements OnInit {
             robotCoordinates.Y = robotCoordinates.Y-1;
           break;
           case CARDINAL_POINTS.EAST:
-            robotCoordinates.X = robotCoordinates.X-1;
+            robotCoordinates.X = robotCoordinates.X+1;
           break;
           case CARDINAL_POINTS.WEST:
-            robotCoordinates.X = robotCoordinates.X+1;
+            robotCoordinates.X = robotCoordinates.X-1;
           break;
           
         }
@@ -179,6 +179,7 @@ export class ChessBoardComponent implements OnInit {
    * set the new robot direction after rotate command
    */
   private _setNewRobotDirection = (direction: string | null | undefined, command: string): robotState | null => {
+   
     let robotState: robotState = {
       command,
       degrees: 180,
@@ -194,10 +195,10 @@ export class ChessBoardComponent implements OnInit {
           degrees = 180;
         break;
         case CARDINAL_POINTS.WEST:
-          degrees = -90;
+          degrees = 90;
         break;
         case CARDINAL_POINTS.EAST:
-          degrees = 90;
+          degrees = -90;
         break;
         case CARDINAL_POINTS.SOUTH:
           degrees = 0;
