@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { isNil } from 'lodash';
 import { BehaviorSubject, filter, tap } from 'rxjs';
 import { robotState } from 'src/app/models/models';
-import { SharedFuncsService } from 'src/app/services/shared-funcs.service';
 
 @Component({
   selector: 'toy-robot',
@@ -14,15 +13,8 @@ export class ToyRobotComponent implements OnInit {
   @ViewChild('toyRobot', {static: true}) toyRobot: ElementRef = new ElementRef(null);
 
   @Input()robotState$: BehaviorSubject<robotState | null> = new BehaviorSubject<robotState | null>(null);
-  @Input()robotCommand$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
-  private _direction: string | null = null;
-  private _degrees: number = 0;
-
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private sharedFuncsService: SharedFuncsService
-    ) { }
+  constructor() { }
 
   ngOnInit(): void {
   

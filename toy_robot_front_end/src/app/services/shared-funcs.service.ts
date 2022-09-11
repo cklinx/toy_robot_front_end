@@ -27,7 +27,6 @@ export class SharedFuncsService {
         return CARDINAL_POINTS.SOUTH;
       default:
         return CARDINAL_POINTS.NORTH;
-      
     }
   }
 

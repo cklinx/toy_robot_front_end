@@ -13,7 +13,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class ChessBoardComponent implements OnInit {
 
-  public numberOfSquares: number = 25;
+  public numberOfSquares: number = 100;
   public defaultNumberOfSquares: number = 25;
   public title:string = 'toy_robot_front_end';
   public robotCoordinates: robotCoordinates | null = null;
@@ -42,7 +42,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   /**
-   * create a cardinal points array to show in the mask
+   * create the cardinal points array to show in the mask
    * @param cardinalPoints 
    */
   private _setCardinalPoints = (cardinalPoints: string[]) => {
@@ -175,7 +175,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
    /**
-   * set the new robot direction after rotate command
+   * set the new robot direction
    */
   private _setNewRobotDirection = (direction: string | null | undefined, command: string): robotState | null => {
    
@@ -205,8 +205,8 @@ export class ChessBoardComponent implements OnInit {
         default:
           degrees = 0;
         break;
-        
       }
+
       if(command === ROBOT_COMMANDS.LEFT){
         degrees -=90;
       } else if(command === ROBOT_COMMANDS.RIGHT) {
