@@ -7,12 +7,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChessBoardComponent } from './components/chess-board/chess-board.component';
 import { ToyRobotComponent } from './components/toy-robot/toy-robot.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChessBoardComponent,
-    ToyRobotComponent
+    ToyRobotComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,

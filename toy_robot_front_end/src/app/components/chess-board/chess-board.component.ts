@@ -4,6 +4,7 @@ import { isNil } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CARDINAL_POINTS, robotCoordinates, robotState, ROBOT_COMMANDS } from 'src/app/models/models';
 import { SharedFuncsService } from 'src/app/services/shared-funcs.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'chess-board',
@@ -18,13 +19,17 @@ export class ChessBoardComponent implements OnInit {
   public robotCoordinates: robotCoordinates | null = null;
   public cardinalPoints: string[] = [];
   public formControl: FormGroup = new FormGroup({});
+
+  private _maxSquaresForSide: number = 0;
+
   //BehaviorSubject
   // public robotCommand$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   public robotState$: BehaviorSubject<robotState | null> = new BehaviorSubject<robotState | null>(null);
 
   constructor(
     private formBuilder: FormBuilder,
-    private sharedFuncsService: SharedFuncsService
+    private sharedFuncsService: SharedFuncsService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -56,12 +61,11 @@ export class ChessBoardComponent implements OnInit {
     console.log("sssssssssss",Math.sqrt(this.numberOfSquares));
     let squares: number = 0; 
     if(this._isNumberOfSquaresCorrect(this.numberOfSquares)) {
-      
       squares = Math.sqrt(this.numberOfSquares);
     } else {
       squares = Math.sqrt(this.defaultNumberOfSquares);
     }
-
+    this._maxSquaresForSide = squares -1;
     return [].constructor(squares);
   }
 
@@ -81,21 +85,42 @@ export class ChessBoardComponent implements OnInit {
    * place the robot on the chessboard
    */
   placeRobot() {
-    // this.robotPosition = 20;
+    // this.toastService.show('I am a standard toast');
+        // this.robotPosition = 20;
     this.robotCoordinates = {
       X: this.formControl.controls['X'].value as number,
       Y: this.formControl.controls['Y'].value as number,
     }
+    const wrongPosition = this._checkRobotPosition(this.robotCoordinates);
+    if(wrongPosition) {
+      this.toastService.show(`Wrong robot position: max position is ${this._maxSquaresForSide} x ${this._maxSquaresForSide}`, { classname: 'bg-danger text-light', delay: 2000 });
+    } else {
+      console.log('place', wrongPosition, this._maxSquaresForSide, this.robotCoordinates);
+      this.robotState$.next({
+        ...this.robotCoordinates,
+        direction: this.formControl.controls['direction'].value as string,
+        command: ROBOT_COMMANDS.PLACE
+      })
+    }
+    
+
     // this.userChangePosition
-    console.log('place', this.robotCoordinates);
-    this.robotState$.next({
-      ...this.robotCoordinates,
-      direction: this.formControl.controls['direction'].value as string,
-      command: ROBOT_COMMANDS.PLACE
-    })
+    
     // this.defaultPosition = 0;
     // this.way = Compass.SOUTH;
   }
+
+  /**
+   * check if the robot has inside the chessboard
+   */
+  private _checkRobotPosition = (robotCoordinates: robotCoordinates): boolean => {
+    if(!isNil(robotCoordinates)) {
+      return robotCoordinates.X > this._maxSquaresForSide || robotCoordinates.X < 0 || robotCoordinates.Y > this._maxSquaresForSide || robotCoordinates.Y < 0
+    } else {
+      return false
+    };
+    
+  };
 
   /**
    * rotate/move the robot
