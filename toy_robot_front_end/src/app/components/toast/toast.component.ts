@@ -1,10 +1,8 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'toast',
-  // templateUrl: './toast.component.html',
-  // styleUrls: ['./toast.component.scss'],
   template: `
     <ngb-toast
       *ngFor="let toast of toastService.toasts"

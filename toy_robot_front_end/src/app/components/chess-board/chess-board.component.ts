@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { isNil } from 'lodash';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CARDINAL_POINTS, robotCoordinates, robotState, ROBOT_COMMANDS } from 'src/app/models/models';
 import { SharedFuncsService } from 'src/app/services/shared-funcs.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -24,7 +24,6 @@ export class ChessBoardComponent implements OnInit {
   private _maxSquaresForSide: number = 0;
 
   //BehaviorSubject
-  // public robotCommand$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   public robotState$: BehaviorSubject<robotState | null> = new BehaviorSubject<robotState | null>(null);
 
   constructor(
@@ -49,7 +48,6 @@ export class ChessBoardComponent implements OnInit {
   private _setCardinalPoints = (cardinalPoints: string[]) => {
     if(!isNil(this.cardinalPoints)){
       for (const [key, value] of Object.entries(CARDINAL_POINTS)) {
-        console.log(`${key}: ${value}`);
         cardinalPoints.push(value);
       }
     }
@@ -59,7 +57,6 @@ export class ChessBoardComponent implements OnInit {
    * get the table's columns and rows
    */
   public getNumberOfColumns = (): number[] => {
-    console.log("sssssssssss",Math.sqrt(this.numberOfSquares));
     let squares: number = 0; 
     if(this._isNumberOfSquaresCorrect(this.numberOfSquares)) {
       squares = Math.sqrt(this.numberOfSquares);
@@ -97,7 +94,6 @@ export class ChessBoardComponent implements OnInit {
       this.toastService.show(`Wrong robot position: max position is ${this._maxSquaresForSide} x ${this._maxSquaresForSide}`, { classname: 'bg-danger text-light', delay: 2000 });
     } else {
       const newRobotState = this._setNewRobotDirection(this.formControl.controls['direction'].value, ROBOT_COMMANDS.PLACE);
-      console.log('place', newRobotState, wrongPosition, this._maxSquaresForSide, this.robotCoordinates);
       this.robotState$.next({
         ...this.robotCoordinates,
         direction: this.formControl.controls['direction'].value as string,
@@ -105,12 +101,7 @@ export class ChessBoardComponent implements OnInit {
         degrees: !isNil(newRobotState) ? newRobotState.degrees : 180
       })
     }
-    
 
-    // this.userChangePosition
-    
-    // this.defaultPosition = 0;
-    // this.way = Compass.SOUTH;
   }
 
   /**
@@ -126,26 +117,20 @@ export class ChessBoardComponent implements OnInit {
   };
 
   /**
-   * rotate/move the robot
+   * rotate/move the robot and manage errors
    */
   moveRobot(command: string) {
 
-    // this.userChangePosition
-    console.log('moveRobot', command, this.robotState$.value, this.robotState$.value?.direction);
-    
     if(isNil(this.robotState$.value)){
       this.toastService.show(`You must place the robot before move it`, { classname: 'bg-danger text-light', delay: 2000 });
     } else {
       let newRobotState: robotState | null = null;
       if(command === ROBOT_COMMANDS.MOVE && !isNil(this.robotCoordinates)){
-        console.log('this.robotCoordinates2222', this.robotCoordinates);
         let robotCoordinates: robotCoordinates = {
           ...this.robotCoordinates
         }
         switch(this.robotState$.value?.direction) {
-          case CARDINAL_POINTS.NORTH:
-            console.log('norddddddd', robotCoordinates.Y);
-            
+          case CARDINAL_POINTS.NORTH:            
             robotCoordinates.Y = robotCoordinates.Y+1;
           break;
           case CARDINAL_POINTS.SOUTH:
@@ -157,8 +142,6 @@ export class ChessBoardComponent implements OnInit {
           case CARDINAL_POINTS.WEST:
             robotCoordinates.X = robotCoordinates.X+1;
           break;
-          // this.reset.emit(null);
-          // this.setWay();
           
         }
   
@@ -176,27 +159,9 @@ export class ChessBoardComponent implements OnInit {
             degrees: !isNil(newRobotState) ? newRobotState.degrees : 180
           })
         }
-        console.log('this.robotCoordinates', this.robotCoordinates);
-        
-        
-        // this.robotState$.next({
-        //   ...this.robotState$.value as robotState,
-        //   // direction
-        // })
       } else if(command === ROBOT_COMMANDS.LEFT || command === ROBOT_COMMANDS.RIGHT){ //RIGHT or LEFT command
-        console.log('antaniiii', command, this.robotState$.value);
-        // let robotDegrees = 
-        // if(command === ROBOT_COMMANDS.LEFT){
-  
-        // } else if(command === ROBOT_COMMANDS.RIGHT){
-  
-        // }
-        // this.robotCommand$.next(command);
+
         newRobotState = this._setNewRobotDirection(this.robotState$.value?.direction, command);
-        console.log('antaniii222', newRobotState);
-        
-        
-        // let newDirection: string | null = null;
         
         this.robotState$.next({
           ...this.robotState$.value as robotState,
@@ -222,7 +187,6 @@ export class ChessBoardComponent implements OnInit {
       direction: CARDINAL_POINTS.NORTH
     };
     if(!isNil(direction)){
-      console.log('_setNewRobotDirection', direction);
       
       let degrees: number = 0; 
       switch(direction) {
@@ -243,17 +207,13 @@ export class ChessBoardComponent implements OnInit {
         break;
         
       }
-      console.log("_setNewRobotDirection 33333", degrees);
       if(command === ROBOT_COMMANDS.LEFT){
         degrees -=90;
       } else if(command === ROBOT_COMMANDS.RIGHT) {
         degrees +=90;
       }
-      console.log("_setNewRobotDirection 1111111", degrees);
       degrees = this.sharedFuncsService.checkDegrees(degrees);
-      console.log("_setNewRobotDirection 22222", degrees);
       const newDirection = this.sharedFuncsService.setNewDirection(degrees);
-      console.log("_setNewRobotDirection OOOOO", degrees, newDirection);
       robotState.direction = newDirection;
       robotState.degrees = degrees;
 

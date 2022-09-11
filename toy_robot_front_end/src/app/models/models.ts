@@ -12,13 +12,6 @@ export enum ROBOT_COMMANDS {
     PLACE = "place"
 }
 
-// export interface cardinalPoints {
-//     NORTH: number,
-//     SOUTH: number,
-//     EAST: number,
-//     OWEST: number
-// }
-
 export interface robotCoordinates {
     X: number,
     Y: number

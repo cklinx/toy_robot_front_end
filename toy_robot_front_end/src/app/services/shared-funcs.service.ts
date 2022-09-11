@@ -15,21 +15,16 @@ export class SharedFuncsService {
     switch(degrees) {
       case 180:
       case -180:
-        console.log("_setNewRobotDirection", 0);
         return CARDINAL_POINTS.NORTH;
       case 90:
       case -270:
-        console.log("_setNewRobotDirection", 1);
         return CARDINAL_POINTS.EAST;
       case -90:
       case 270:
-        console.log("_setNewRobotDirection", 2);
         return CARDINAL_POINTS.WEST;
       case 0:
-        console.log("_setNewRobotDirection", 3);
         return CARDINAL_POINTS.SOUTH;
       default:
-        console.log("_setNewRobotDirection", 4, degrees);
         return CARDINAL_POINTS.NORTH;
       
     }

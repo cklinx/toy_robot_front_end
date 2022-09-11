@@ -1,11 +1,6 @@
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
-// body {
-//     height: 100%;
-//     background-color: rgb(19, 60, 95);
-// }
-
 .odd {
     background-color: $gray-200;
 }
@@ -18,28 +13,9 @@
     height: 75px;
     background-color: $green-200;
 }
-// .ratio-1x1 {
-//     @include media-breakpoint-up(sd) {
-//       aspect-ratio: auto;
-//     }
-//   }
-  
-// .square{
-//     width: 100px;
-//     height: 100px;
-// }
+
 .chessboard-container{
     max-width: 756px;
     padding-left: 20px;
     padding-right: 20px;
-    // width: 500px;
-    // height: 1756px;
-    // background-color: red;
-}
-
-// .grid {
-//     display: grid;
-//     grid-template-columns: repeat(5, 1fr);
-//     grid-template-rows: repeat(5, 100px);
-// }
-  
+}  
