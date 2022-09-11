@@ -1,0 +1,109 @@
+<div class="sticky-bottom d-flex align-items-center justify-content-center header mb-5">
+	<div class="row">
+            <h1>{{title}}</h1>
+        </div> 
+</div>
+
+
+<!-- <div class="d-flex align-items-center justify-content-center align-middle"> -->
+<div class="mx-auto chessboard-container">
+
+    <div class="row">
+        <div class="col-sm">
+            <form [formGroup]="formControl">
+                <div class="form-group row">
+                    <label for="X">Set X:</label>
+                    <input type="number" min="0" formControlName="X" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Set X coordinate">
+                </div>
+                <div class="form-group mt-2 row">
+                    <label for="Y">Set Y:</label>
+                    <input type="number" min="0" formControlName="Y" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Set Y coordinate">
+                </div>
+                <div class="form-group mt-2 row">
+                    <label for="direction">Set direction:</label>
+                    <select class="form-control" formControlName="direction">
+                      <option [ngValue]="direction" *ngFor="let direction of cardinalPoints">{{direction}}</option>
+                    </select>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <button type="button" class="btn btn-secondary" (click)="placeRobot()">Place</button>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('left')"><i class="bi bi-sign-turn-left"></i> Left</button>
+                        <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('move')"><i class="bi bi-arrow-up-square"></i> Move</button>
+                        <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('right')">Right <i class="bi bi-sign-turn-right"></i></button>
+                    </div>
+                </div>
+                
+                
+                  
+            </form>
+        </div>
+        <div class="col-sm">
+            <div class="container border shadow-lg d-flex flex-column-reverse">
+                <div class="row" *ngFor="let square of getNumberOfColumns(); let rIndex = index">
+                  <div class="col ratio ratio-1x1 border p-0" 
+                    [ngClass]="rIndex%2 ? cIndex%2 ? 'even' : 'odd' : cIndex%2 ? 'odd' : 'even'"
+                    *ngFor="let square of getNumberOfColumns(); let cIndex = index"
+            
+                    >
+                    <!-- X: {{cIndex}} - Y: {{rIndex}} -->
+                        <!-- <toy-robot 
+                            *ngIf="robotCoordinates != null && rIndex === robotCoordinates.Y && cIndex === robotCoordinates.X"
+                            [robotState$]="robotState$"
+                            [robotCommand$]="robotCommand$"
+                            >
+                        </toy-robot> -->
+                        <toy-robot 
+                            *ngIf="robotCoordinates != null && rIndex === robotCoordinates.Y && cIndex === robotCoordinates.X"
+                            [robotState$]="robotState$"
+                            >
+                        </toy-robot>
+                  </div>
+                </div>
+            </div> 
+        </div>
+
+        <!-- <div class="col-sm">
+            <div class="container border shadow-lg ">
+                <div class="row " *ngFor="let square of getNumberOfColumns(); let rIndex = index">
+                  <div class=" col ratio ratio-1x1 border p-0" 
+                    [ngClass]="rIndex%2 ? cIndex%2 ? 'even' : 'odd' : cIndex%2 ? 'odd' : 'even'"
+                    *ngFor="let square of getNumberOfColumns(); let cIndex = index"
+            
+                    >
+                    {{rIndex}}
+                        <toy-robot *ngIf="robotCoordinates != null && rIndex === robotCoordinates.X && cIndex === robotCoordinates.Y">
+                        </toy-robot>
+                  </div>
+                </div>
+            </div> 
+        </div> -->
+    </div>
+
+    
+        
+</div>
+
+<!-- <toast></toast> -->
+
+<!-- <div class="sticky-bottom d-flex align-items-center justify-content-center header mt-5">
+	<div class="row">
+        <div class="col">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="col">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary">
+                    Left 
+                    <img src="http://i.stack.imgur.com/e2S63.png" width="20" />
+                </button>
+                <button type="button" class="btn btn-primary">Middle</button>
+                <button type="button" class="btn btn-primary">Right</button>
+            </div>
+        </div>
+        
+    </div>
+    
+</div> -->
