@@ -13,19 +13,19 @@ export class SharedFuncsService {
    */
    public setNewDirection = (degrees: number): string => {
     switch(degrees) {
-      case 0:
+      case 180:
+      case -180:
         console.log("_setNewRobotDirection", 0);
-        
         return CARDINAL_POINTS.NORTH;
       case 90:
+      case -270:
         console.log("_setNewRobotDirection", 1);
-        return CARDINAL_POINTS.WEST;
+        return CARDINAL_POINTS.EAST;
       case -90:
       case 270:
         console.log("_setNewRobotDirection", 2);
-        return CARDINAL_POINTS.EAST;
-      case 180:
-      case -180:
+        return CARDINAL_POINTS.WEST;
+      case 0:
         console.log("_setNewRobotDirection", 3);
         return CARDINAL_POINTS.SOUTH;
       default:
@@ -41,7 +41,7 @@ export class SharedFuncsService {
    */
    public checkDegrees = (degrees: number): number => {
     if(degrees > 270 || degrees < -270) {
-      return 0;
+      return 180;
     } else {
       return degrees;
     }

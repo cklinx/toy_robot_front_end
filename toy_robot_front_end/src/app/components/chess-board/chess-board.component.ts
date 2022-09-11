@@ -19,6 +19,7 @@ export class ChessBoardComponent implements OnInit {
   public robotCoordinates: robotCoordinates | null = null;
   public cardinalPoints: string[] = [];
   public formControl: FormGroup = new FormGroup({});
+  public showReport: boolean = false;
 
   private _maxSquaresForSide: number = 0;
 
@@ -95,11 +96,13 @@ export class ChessBoardComponent implements OnInit {
     if(wrongPosition) {
       this.toastService.show(`Wrong robot position: max position is ${this._maxSquaresForSide} x ${this._maxSquaresForSide}`, { classname: 'bg-danger text-light', delay: 2000 });
     } else {
-      console.log('place', wrongPosition, this._maxSquaresForSide, this.robotCoordinates);
+      const newRobotState = this._setNewRobotDirection(this.formControl.controls['direction'].value, ROBOT_COMMANDS.PLACE);
+      console.log('place', newRobotState, wrongPosition, this._maxSquaresForSide, this.robotCoordinates);
       this.robotState$.next({
         ...this.robotCoordinates,
         direction: this.formControl.controls['direction'].value as string,
-        command: ROBOT_COMMANDS.PLACE
+        command: ROBOT_COMMANDS.PLACE,
+        degrees: !isNil(newRobotState) ? newRobotState.degrees : 180
       })
     }
     
@@ -128,96 +131,142 @@ export class ChessBoardComponent implements OnInit {
   moveRobot(command: string) {
 
     // this.userChangePosition
-    console.log('moveRobot', command, this.robotState$.value?.direction);
+    console.log('moveRobot', command, this.robotState$.value, this.robotState$.value?.direction);
     
-
-    if(command === ROBOT_COMMANDS.MOVE && !isNil(this.robotCoordinates)){
-      
-      switch(this.robotState$.value?.direction) {
-        case CARDINAL_POINTS.NORTH:
-          console.log('norddddddd', this.robotCoordinates.Y);
+    if(isNil(this.robotState$.value)){
+      this.toastService.show(`You must place the robot before move it`, { classname: 'bg-danger text-light', delay: 2000 });
+    } else {
+      let newRobotState: robotState | null = null;
+      if(command === ROBOT_COMMANDS.MOVE && !isNil(this.robotCoordinates)){
+        console.log('this.robotCoordinates2222', this.robotCoordinates);
+        let robotCoordinates: robotCoordinates = {
+          ...this.robotCoordinates
+        }
+        switch(this.robotState$.value?.direction) {
+          case CARDINAL_POINTS.NORTH:
+            console.log('norddddddd', robotCoordinates.Y);
+            
+            robotCoordinates.Y = robotCoordinates.Y+1;
+          break;
+          case CARDINAL_POINTS.SOUTH:
+            robotCoordinates.Y = robotCoordinates.Y-1;
+          break;
+          case CARDINAL_POINTS.EAST:
+            robotCoordinates.X = robotCoordinates.X-1;
+          break;
+          case CARDINAL_POINTS.WEST:
+            robotCoordinates.X = robotCoordinates.X+1;
+          break;
+          // this.reset.emit(null);
+          // this.setWay();
           
-          this.robotCoordinates.Y = this.robotCoordinates.Y+1;
-        break;
-        case CARDINAL_POINTS.SOUTH:
-          this.robotCoordinates.Y = this.robotCoordinates.Y-1;
-        break;
-        case CARDINAL_POINTS.EAST:
-          this.robotCoordinates.X = this.robotCoordinates.X-1;
-        break;
-        case CARDINAL_POINTS.WEST:
-          this.robotCoordinates.X = this.robotCoordinates.X+1;
-        break;
-        // this.reset.emit(null);
-        // this.setWay();
+        }
+  
+        const wrongPosition = this._checkRobotPosition(robotCoordinates);
+        if(wrongPosition) {
+          this.toastService.show(`Wrong robot position: max position is ${this._maxSquaresForSide} x ${this._maxSquaresForSide}`, { classname: 'bg-danger text-light', delay: 2000 });
+        } else {
+          this.robotCoordinates = robotCoordinates;
+          newRobotState = this._setNewRobotDirection(this.robotState$.value?.direction, command);
+  
+          this.robotState$.next({
+            ...this.robotCoordinates,
+            command,
+            direction: !isNil(newRobotState) ? newRobotState.direction : CARDINAL_POINTS.NORTH,
+            degrees: !isNil(newRobotState) ? newRobotState.degrees : 180
+          })
+        }
+        console.log('this.robotCoordinates', this.robotCoordinates);
         
+        
+        // this.robotState$.next({
+        //   ...this.robotState$.value as robotState,
+        //   // direction
+        // })
+      } else if(command === ROBOT_COMMANDS.LEFT || command === ROBOT_COMMANDS.RIGHT){ //RIGHT or LEFT command
+        console.log('antaniiii', command, this.robotState$.value);
+        // let robotDegrees = 
+        // if(command === ROBOT_COMMANDS.LEFT){
+  
+        // } else if(command === ROBOT_COMMANDS.RIGHT){
+  
+        // }
+        // this.robotCommand$.next(command);
+        newRobotState = this._setNewRobotDirection(this.robotState$.value?.direction, command);
+        console.log('antaniii222', newRobotState);
+        
+        
+        // let newDirection: string | null = null;
+        
+        this.robotState$.next({
+          ...this.robotState$.value as robotState,
+          command,
+          direction: !isNil(newRobotState) ? newRobotState.direction : CARDINAL_POINTS.NORTH,
+          degrees: !isNil(newRobotState) ? newRobotState.degrees : 180
+        })
       }
-      this.robotState$.next({
-        ...this.robotState$.value as robotState,
-        // direction
-      })
-    } else { //RIGHT or LEFT command
-      console.log('antaniiii', command, this.robotState$.value);
-      // let robotDegrees = 
-      // if(command === ROBOT_COMMANDS.LEFT){
-
-      // } else if(command === ROBOT_COMMANDS.RIGHT){
-
-      // }
-      // this.robotCommand$.next(command);
-      const newDirection = this._setNewRobotDirection(this.robotState$.value?.direction, command);
-      console.log('antaniii222', newDirection);
-      
-      this.robotState$.next({
-        ...this.robotState$.value as robotState,
-        command,
-        direction: newDirection
-      })
-      // let newDirection: string | null = null;
-      
-
     }
-    // this.defaultPosition = 0;
-    // this.way = Compass.SOUTH;
+    
+    
   }
 
    /**
    * set the new robot direction after rotate command
    */
-  private _setNewRobotDirection = (direction: string | null | undefined, command: string): string => {
+  private _setNewRobotDirection = (direction: string | null | undefined, command: string): robotState | null => {
+    let robotState: robotState = {
+      command,
+      degrees: 180,
+      X: 0,
+      Y: 0,
+      direction: CARDINAL_POINTS.NORTH
+    };
     if(!isNil(direction)){
+      console.log('_setNewRobotDirection', direction);
+      
       let degrees: number = 0; 
       switch(direction) {
         case CARDINAL_POINTS.NORTH:
-          degrees = 0;
+          degrees = 180;
         break;
         case CARDINAL_POINTS.WEST:
-          degrees = 90;
+          degrees = -90;
         break;
         case CARDINAL_POINTS.EAST:
-          degrees = 270;
+          degrees = 90;
         break;
         case CARDINAL_POINTS.SOUTH:
-          degrees = 180;
+          degrees = 0;
         break;
         default:
           degrees = 0;
         break;
         
       }
+      console.log("_setNewRobotDirection 33333", degrees);
       if(command === ROBOT_COMMANDS.LEFT){
         degrees -=90;
       } else if(command === ROBOT_COMMANDS.RIGHT) {
         degrees +=90;
       }
-
+      console.log("_setNewRobotDirection 1111111", degrees);
       degrees = this.sharedFuncsService.checkDegrees(degrees);
-      
+      console.log("_setNewRobotDirection 22222", degrees);
       const newDirection = this.sharedFuncsService.setNewDirection(degrees);
       console.log("_setNewRobotDirection OOOOO", degrees, newDirection);
-      return newDirection;
-    } else return CARDINAL_POINTS.NORTH;
-    
+      robotState.direction = newDirection;
+      robotState.degrees = degrees;
+
+    }
+    return robotState;
   }
+
+  /**
+   * toggle the report status
+   */
+  public toggleReport = () => {
+    this.showReport = !this.showReport;
+  }
+    
 
 }

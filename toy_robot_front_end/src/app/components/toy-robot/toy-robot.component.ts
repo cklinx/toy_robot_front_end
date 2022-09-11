@@ -97,11 +97,11 @@ export class ToyRobotComponent implements OnInit {
 
     //manage the commands
     this.robotState$.pipe(
-      filter((val) => !isNil(val)),
+      filter((val: robotState | null) => !isNil(val)),
       tap((val) => console.log('ddddddd33333', val)),
-      map((robotState: robotState | null) => this._setDirection(robotState?.direction)),
+      // map((robotState: robotState | null) => this._setDirection(robotState?.direction)),
       tap((val) => console.log('ddddddd33333wwwwww', val, this._degrees)),
-      tap(() => this._rotate(this._degrees))
+      tap((val) => this._rotate(val?.degrees))
     )
     .subscribe()
   }
@@ -109,102 +109,67 @@ export class ToyRobotComponent implements OnInit {
   /**
    * rotate the robot direction in the html
    */
-  private _rotate = (degrees: number) => {
-    this.toyRobot.nativeElement.style.transform = 'rotate('+degrees+'deg)';
+  private _rotate = (degrees: number | null | undefined) => {
+    if(!isNil(degrees)){
+      this.toyRobot.nativeElement.style.transform = 'rotate('+degrees+'deg)';
+    }
+
   }
   
   /**
    * set the robot direction
    * @param direction 
    */
-  private _setDirection = (direction: string | null | undefined): number => {
-    if(!isNil(direction)){
-      this._direction = direction;
+  // private _setDirection = (direction: string | null | undefined): number => {
+  //   if(!isNil(direction)){
+  //     this._direction = direction;
       
-      switch(direction) {
-        case CARDINAL_POINTS.NORTH:
-          console.log('left', this._degrees);
-          // this.rotate()
-          this._degrees = 0;
-          // this.state = this._degrees;
-          // this.toyRobot.nativeElement.style.transform = 'rotate('+ this.degrees +'deg)'
-          // this._degrees = this._degrees + 90;
-          // this._degrees = this._checkDegrees(this._degrees);
-        break;
-        case CARDINAL_POINTS.SOUTH:
-          this._degrees = -180;
-          // this.state = this._degrees;
-          // this._degrees = this._degrees - 90;
-          // this._degrees = this._checkDegrees(this._degrees);
-        break;
-        case CARDINAL_POINTS.EAST:
-          this._degrees = -90;
-          // this.changePosition.emit(this.degrees);
-        break;
-        case CARDINAL_POINTS.WEST:
-          this._degrees = 90;
-          // this.changePosition.emit(this.degrees);
-        break;
-        case ROBOT_COMMANDS.LEFT:
-          this._degrees -= 90;
-          this._degrees = this.sharedFuncsService.checkDegrees(this._degrees);
-          this.sharedFuncsService.setNewDirection(this._degrees);
-          // this.changePosition.emit(this.degrees);
-        break;
-        case ROBOT_COMMANDS.RIGHT:
-          this._degrees += 90;
-          this._degrees = this.sharedFuncsService.checkDegrees(this._degrees);
-          this.sharedFuncsService.setNewDirection(this._degrees);
-          // this.changePosition.emit(this.degrees);
-        break;
-        // this.reset.emit(null);
-        // this.setWay();
+  //     switch(direction) {
+  //       case CARDINAL_POINTS.NORTH:
+  //         console.log('left', this._degrees);
+  //         // this.rotate()
+  //         this._degrees = 180;
+  //         // this.state = this._degrees;
+  //         // this.toyRobot.nativeElement.style.transform = 'rotate('+ this.degrees +'deg)'
+  //         // this._degrees = this._degrees + 90;
+  //         // this._degrees = this._checkDegrees(this._degrees);
+  //       break;
+  //       case CARDINAL_POINTS.SOUTH:
+  //         this._degrees = 0;
+  //         // this.state = this._degrees;
+  //         // this._degrees = this._degrees - 90;
+  //         // this._degrees = this._checkDegrees(this._degrees);
+  //       break;
+  //       case CARDINAL_POINTS.EAST:
+  //         this._degrees = 270;
+  //         // this.changePosition.emit(this.degrees);
+  //       break;
+  //       case CARDINAL_POINTS.WEST:
+  //         this._degrees = 90;
+  //         // this.changePosition.emit(this.degrees);
+  //       break;
+  //       // case ROBOT_COMMANDS.LEFT:
+  //       //   this._degrees -= 90;
+  //       //   this._degrees = this.sharedFuncsService.checkDegrees(this._degrees);
+  //       //   this.sharedFuncsService.setNewDirection(this._degrees);
+  //       //   // this.changePosition.emit(this.degrees);
+  //       // break;
+  //       // case ROBOT_COMMANDS.RIGHT:
+  //       //   this._degrees += 90;
+  //       //   this._degrees = this.sharedFuncsService.checkDegrees(this._degrees);
+  //       //   this.sharedFuncsService.setNewDirection(this._degrees);
+  //       //   // this.changePosition.emit(this.degrees);
+  //       // break;
+  //       // this.reset.emit(null);
+  //       // this.setWay();
         
-      }
+  //     }
 
-      console.log('_setDirection', direction, this._degrees);
-      
-    }
-    return this._degrees;
-  }
-
-  // /**
-  //  * check if must reset the degrees
-  //  * @param degrees 
-  //  */
-  // private _checkDegrees = (degrees: number): number => {
-  //   if(degrees > 270 || degrees < -270) {
-  //     return 0;
-  //   } else {
-  //     return degrees;
-  //   }
-  // }
-
-  // /**
-  //  * set the new robot direction after rotate command
-  //  */
-  // private _setNewDirection = (degrees: number): string => {
-  //   switch(degrees) {
-  //     case 0:
-  //       return CARDINAL_POINTS.NORTH;
-  //     case 90:
-  //       return CARDINAL_POINTS.WEST;
-  //     case -90:
-  //     case 270:
-  //       return CARDINAL_POINTS.EAST;
-  //     case 180:
-  //     case -180:
-  //       return CARDINAL_POINTS.SOUTH;
-  //     default:
-  //       return CARDINAL_POINTS.NORTH;
+  //     console.log('_setDirection', direction, this._degrees);
       
   //   }
+  //   return this._degrees;
   // }
 
-  // export enum Compass {
-  //   NORTH = "North",
-  //   SOUTH = "South",
-  //   EAST = "East",
-  //   WEST = "West"
-  // }
+
 }

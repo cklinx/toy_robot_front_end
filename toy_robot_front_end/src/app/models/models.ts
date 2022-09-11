@@ -26,5 +26,6 @@ export interface robotCoordinates {
 
 export interface robotState extends robotCoordinates {
     direction: string,
-    command: string
+    command: string,
+    degrees: number | null
 }

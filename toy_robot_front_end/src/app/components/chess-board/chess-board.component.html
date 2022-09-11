@@ -29,6 +29,9 @@
                     <button type="button" class="btn btn-secondary" (click)="placeRobot()">Place</button>
                 </div>
                 <div class="row mt-2 mb-2">
+                    <button type="button" class="btn btn-secondary" (click)="toggleReport()">Show - Hide Report</button>
+                </div>
+                <div class="row mt-2 mb-2">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('left')"><i class="bi bi-sign-turn-left"></i> Left</button>
                         <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('move')"><i class="bi bi-arrow-up-square"></i> Move</button>
@@ -80,6 +83,18 @@
                 </div>
             </div> 
         </div> -->
+    </div>
+
+    <div *ngIf="showReport" class="row mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Report</h5>
+                <p *ngIf="robotState$.value!=null" class="card-text">X Position: {{robotState$.value['X']}}</p>
+                <p *ngIf="robotState$.value!=null" class="card-text">Y Position: {{robotState$.value['Y']}}</p>
+                <p *ngIf="robotState$.value!=null" class="card-text">Direction: {{robotState$.value['direction']}}</p>
+                <p *ngIf="robotState$.value==null" class="card-text">No Robot in the chessboard</p>
+            </div>
+          </div>
     </div>
 
     
