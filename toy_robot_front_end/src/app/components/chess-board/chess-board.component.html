@@ -7,8 +7,8 @@
 <div class="mx-auto chessboard-container">
 
     <div class="row">
-        <div class="col-sm">
-            <form [formGroup]="formControl">
+        <div class="col-sm ml-5">
+            <form [formGroup]="formControl" class="container">
                 <div class="form-group row">
                     <label for="X">Set X:</label>
                     <input type="number" min="0" formControlName="X" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Set X coordinate">
@@ -30,7 +30,7 @@
                     <button type="button" class="btn btn-secondary" (click)="toggleReport()">Show - Hide Report</button>
                 </div>
                 <div class="row mt-2 mb-2">
-                    <div class="btn-group" role="group" aria-label="Basic example">
+                    <div class="btn-group" role="group" aria-label="robot controls">
                         <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('left')"><i class="bi bi-sign-turn-left"></i> Left</button>
                         <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('move')"><i class="bi bi-arrow-up-square"></i> Move</button>
                         <button type="button" class="btn btn-outline-secondary" (click)="moveRobot('right')">Right <i class="bi bi-sign-turn-right"></i></button>
@@ -59,20 +59,25 @@
 
     </div>
 
-    <div *ngIf="showReport" class="row mt-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Report</h5>
-                <p *ngIf="robotState$.value!=null" class="card-text">X Position: {{robotState$.value['X']}}</p>
-                <p *ngIf="robotState$.value!=null" class="card-text">Y Position: {{robotState$.value['Y']}}</p>
-                <p *ngIf="robotState$.value!=null" class="card-text">Direction: {{robotState$.value['direction']}}</p>
-                <p *ngIf="robotState$.value==null" class="card-text">No Robot in the chessboard</p>
-            </div>
-          </div>
-    </div>
+    
 
     
         
 </div>
+
+
+<div *ngIf="showReport" class="mx-auto mt-4 m-3 chessboard-container bottom-0 start-0 ">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Report</h5>
+            <p *ngIf="robotState$.value!=null" class="card-text">X Position: {{robotState$.value['X']}}</p>
+            <p *ngIf="robotState$.value!=null" class="card-text">Y Position: {{robotState$.value['Y']}}</p>
+            <p *ngIf="robotState$.value!=null" class="card-text">Direction: {{robotState$.value['direction']}}</p>
+            <p *ngIf="robotState$.value==null" class="card-text">No Robot in the chessboard</p>
+        </div>
+        </div>
+</div>
+
+
 
 <toast></toast>
