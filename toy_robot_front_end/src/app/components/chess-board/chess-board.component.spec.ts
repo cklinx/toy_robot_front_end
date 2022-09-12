@@ -12,6 +12,13 @@ import { ChessBoardComponent } from './chess-board.component';
 describe('ChessBoardComponent', () => {
   let component: ChessBoardComponent;
   let fixture: ComponentFixture<ChessBoardComponent>;
+  let bPlace: DebugElement;
+  let bLeft: DebugElement;
+  let bMove: DebugElement;
+  let bRight: DebugElement;
+  let xCoords: DebugElement;
+  let yCoords: DebugElement;
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,28 +35,29 @@ describe('ChessBoardComponent', () => {
     fixture = TestBed.createComponent(ChessBoardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    bPlace = fixture.debugElement.query(By.css('[data-testid="bPlaceRobot"]'));
+    bLeft = fixture.debugElement.query(By.css('[data-testid="bLeft"]'));
+    bMove = fixture.debugElement.query(By.css('[data-testid="bMove"]'));
+    bRight = fixture.debugElement.query(By.css('[data-testid="bRight"]'));
+    xCoords = fixture.debugElement.query(By.css('[data-testid="xCoords"]'));
+    yCoords = fixture.debugElement.query(By.css('[data-testid="yCoords"]'));
+
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it(`should show the error message with a wrong place robot position`, () => {
-    const fixture = TestBed.createComponent(ChessBoardComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+  it(`should show the error message with a wrong place robot position`, () => {    
     
-    const button: DebugElement = fixture.debugElement.query(By.css('[data-testid="bPlaceRobot"]'));
-    const xCoords: DebugElement = fixture.debugElement.query(By.css('[data-testid="xCoords"]'));
-    const yCoords: DebugElement = fixture.debugElement.query(By.css('[data-testid="yCoords"]'));
-
     const maxValue = 5;
     xCoords.nativeElement.value = maxValue;
     yCoords.nativeElement.value = 0;
     xCoords.nativeElement.dispatchEvent(new Event('input'));
     yCoords.nativeElement.dispatchEvent(new Event('input'));
 
-    button.triggerEventHandler('click');
+    bPlace.triggerEventHandler('click');
     fixture.detectChanges();
 
     const toyRobot: DebugElement = fixture.debugElement.query(By.directive(ToyRobotComponent));
@@ -67,21 +75,14 @@ describe('ChessBoardComponent', () => {
   });
 
   it(`should show the robot`, () => {
-    const fixture = TestBed.createComponent(ChessBoardComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
     
-    const button: DebugElement = fixture.debugElement.query(By.css('[data-testid="bPlaceRobot"]'));
-    const xCoords: DebugElement = fixture.debugElement.query(By.css('[data-testid="xCoords"]'));
-    const yCoords: DebugElement = fixture.debugElement.query(By.css('[data-testid="yCoords"]'));
-
     const maxValue = 2;
     xCoords.nativeElement.value = maxValue;
     yCoords.nativeElement.value = 0;
     xCoords.nativeElement.dispatchEvent(new Event('input'));
     yCoords.nativeElement.dispatchEvent(new Event('input'));
 
-    button.triggerEventHandler('click');
+    bPlace.triggerEventHandler('click');
     fixture.detectChanges();
 
     const toyRobot: DebugElement = fixture.debugElement.query(By.directive(ToyRobotComponent));
@@ -99,15 +100,7 @@ describe('ChessBoardComponent', () => {
   });
 
   it(`should manage the wrong robot commands`, () => {
-    const fixture = TestBed.createComponent(ChessBoardComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
     
-    const bPlace: DebugElement = fixture.debugElement.query(By.css('[data-testid="bPlaceRobot"]'));
-    const bLeft: DebugElement = fixture.debugElement.query(By.css('[data-testid="bLeft"]'));
-    const bMove: DebugElement = fixture.debugElement.query(By.css('[data-testid="bMove"]'));
-    const bRight: DebugElement = fixture.debugElement.query(By.css('[data-testid="bRight"]'));
-
     bPlace.triggerEventHandler('click');
     fixture.detectChanges();
   
@@ -152,14 +145,7 @@ describe('ChessBoardComponent', () => {
   });
 
   it(`should not consider the commands`, () => {
-    const fixture = TestBed.createComponent(ChessBoardComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
     
-    const bLeft: DebugElement = fixture.debugElement.query(By.css('[data-testid="bLeft"]'));
-    const bMove: DebugElement = fixture.debugElement.query(By.css('[data-testid="bMove"]'));
-    const bRight: DebugElement = fixture.debugElement.query(By.css('[data-testid="bRight"]'));
-
     expect(component.robotState$.value).toBeNull();
     bLeft.triggerEventHandler('click');
     bRight.triggerEventHandler('click');

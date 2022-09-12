@@ -13,7 +13,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class ChessBoardComponent implements OnInit {
 
-  public numberOfSquares: number = 100;
+  public numberOfSquares: number = 25;
   public defaultNumberOfSquares: number = 25;
   public title:string = 'toy_robot_front_end';
   public robotCoordinates: robotCoordinates | null = null;
